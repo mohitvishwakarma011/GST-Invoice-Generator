@@ -1,0 +1,44 @@
+## [ Visual Studio ]
+.vs/
+*.user
+*.userosscache
+*.sln.doccache
+
+## [ Build outputs ]
+bin/
+obj/
+[Ee]xternals/
+TestResults/
+
+## [ Node/Frontend (if applicable) ]
+node_modules/
+dist/
+npm-debug.log*
+
+## [ Environment & Secrets ]
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+# Note: Some teams commit Development.json, but never commit 
+# appsettings.Production.json or secrets.json.
+secrets.json
+*.ntvs_analysis.dat
+
+## [ Entity Framework & Databases ]
+*.db
+*.db-shm
+*.db-wal
+Migrations/
+# Only ignore Migrations if you prefer to manage them manually; 
+# usually, it's better to keep them tracked.
+
+## [ Operating System Files ]
+.DS_Store
+Thumbs.db
+
+## [ Packages ]
+*.nupkg
+# NuGet packages are usually restored on build, not stored in Git
+**/packages/*
+!**/packages/build/
