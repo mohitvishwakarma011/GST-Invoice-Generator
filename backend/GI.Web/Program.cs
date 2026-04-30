@@ -1,4 +1,8 @@
 
+using GI.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 namespace GI.Web
 {
     public class Program
@@ -8,7 +12,11 @@ namespace GI.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(connString);
+            });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

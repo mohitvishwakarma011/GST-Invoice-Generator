@@ -1,6 +1,6 @@
 ﻿namespace GI.Core.Entities
 {
-    internal class User : BaseAudit
+    public class User : BaseAudit
     {
         public int Id { get; set; }
         public string Email { get; set; } = string.Empty;
