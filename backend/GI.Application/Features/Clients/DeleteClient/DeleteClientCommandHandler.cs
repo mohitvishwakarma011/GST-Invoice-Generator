@@ -1,0 +1,24 @@
+﻿using GI.Application.Common.Interfaces;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace GI.Application.Features.Clients.DeleteClient
+{
+    public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
+    {
+        private readonly IAppDbContext _appDbContext;
+        public DeleteClientCommandHandler(IAppDbContext appDbContext) =>  _appDbContext = appDbContext;
+        public async Task Handle(DeleteClientCommand request, CancellationToken cancellationToken)
+        {
+            var client = await _appDbContext.Clients.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.Id == request.ClientId, cancellationToken);
+
+            if (client is null)
+            {
+                throw new KeyNotFoundException("Client not found.");
+            }
+
+            _appDbContext.Clients.Remove(client);
+            await _appDbContext.SaveChangesAsync();
+        }
+    }
+}

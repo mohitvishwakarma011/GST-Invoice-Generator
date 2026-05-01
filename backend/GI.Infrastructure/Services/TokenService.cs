@@ -30,7 +30,7 @@ namespace GI.Infrastructure.Services
                 issuer: jwt["Issuer"],
                 audience: jwt["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(int.Parse(jwt["ExpiryDays"]!)),
+                expires: DateTime.UtcNow.AddDays(int.Parse(jwt["ExpiryMins"]!)),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
 

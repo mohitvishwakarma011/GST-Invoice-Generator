@@ -1,6 +1,7 @@
 
 using GI.Infrastructure;
 using GI.Infrastructure.Data;
+using GI.Web.Middleware;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -18,6 +19,7 @@ namespace GI.Web
             {
                 options.UseSqlServer(connString);
             });
+            builder.Services.AddHttpContextAccessor();
             builder.Services.InitializeAppSettings(builder.Configuration);
             builder.Services.ConfigureDefaults(builder.Configuration);
             builder.Services.AddControllers();
@@ -35,6 +37,7 @@ namespace GI.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

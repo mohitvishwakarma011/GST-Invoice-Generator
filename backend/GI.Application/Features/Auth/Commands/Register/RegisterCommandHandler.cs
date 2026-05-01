@@ -18,7 +18,7 @@ namespace GI.Application.Features.Auth.Commands.Register
         }
 
         public async Task<AuthResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
-        {
+         {
             bool emailExists = await _appDbContext.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
             if (emailExists)
                 throw new InvalidOperationException("Email already registered.");
