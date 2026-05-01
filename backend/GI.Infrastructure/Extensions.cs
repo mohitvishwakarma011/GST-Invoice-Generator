@@ -1,0 +1,53 @@
+﻿using FluentValidation;
+using GI.Application.Common.Interfaces;
+using GI.Infrastructure.Data;
+using GI.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+namespace GI.Infrastructure
+{
+    public static class Extensions
+    {
+        public static void InitializeAppSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            
+        }
+
+        public static void ConfigureDefaults(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
+            ConfigureServices(services);
+            ConfigureJwt(services, configuration);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly));
+            services.AddValidatorsFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly);
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddScoped<ITokenService, TokenService>();
+        }
+
+        private static void ConfigureJwt(IServiceCollection services, IConfiguration configuration)
+        {
+            var jwt = configuration.GetSection("JwtSettings");
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwt["Issuer"],
+                        ValidAudience = jwt["Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwt["SecretKey"]!))
+                    };
+                });
+        }
+    }
+}

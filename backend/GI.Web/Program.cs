@@ -1,4 +1,5 @@
 
+using GI.Infrastructure;
 using GI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,6 +18,8 @@ namespace GI.Web
             {
                 options.UseSqlServer(connString);
             });
+            builder.Services.InitializeAppSettings(builder.Configuration);
+            builder.Services.ConfigureDefaults(builder.Configuration);
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -32,7 +35,7 @@ namespace GI.Web
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

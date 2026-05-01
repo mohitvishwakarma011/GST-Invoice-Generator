@@ -1,10 +1,11 @@
-﻿using GI.Core.Entities;
+﻿using GI.Application.Common.Interfaces;
+using GI.Core.Entities;
 using GI.Infrastructure.EntityConfigs;
 using Microsoft.EntityFrameworkCore;
 
 namespace GI.Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
