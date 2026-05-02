@@ -10,7 +10,7 @@ namespace GI.Web.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ISender _mediator;
-        public AuthController(ISender mediator)
+        public AuthController(ISender mediator,IHttpContextAccessor httpContextAccessor)
         {
             _mediator = mediator;
         }
