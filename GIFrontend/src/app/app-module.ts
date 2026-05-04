@@ -4,10 +4,12 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { SharedModule } from './shared/shared.module';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
-    App
+    App,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

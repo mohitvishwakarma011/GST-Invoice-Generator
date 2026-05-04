@@ -3,6 +3,7 @@ import { LayoutComponent } from "./components";
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { ResourceNotFoundComponent } from './components/resource-not-found/resource-not-found.component';
 
 @NgModule({
     imports:[
@@ -11,10 +12,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         MatInputModule
     ],
     declarations:[
-        LayoutComponent
+        LayoutComponent,
+        ResourceNotFoundComponent
     ],
     exports:[
-        LayoutComponent
+        LayoutComponent,
+        ResourceNotFoundComponent
     ]
 })
 export class SharedModule{
