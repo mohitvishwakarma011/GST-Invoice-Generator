@@ -1,6 +1,8 @@
-﻿using GI.Application.Features.Clients.CreateClient;
+﻿using GI.Application.Features;
+using GI.Application.Features.Clients.CreateClient;
 using GI.Application.Features.Clients.DeleteClient;
 using GI.Application.Features.Clients.GetClients;
+using GI.Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +19,10 @@ namespace GI.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetClientsQuery query)
         {
-            var result = await _mediator.Send(new GetClientsQuery(UserId));
+            query.UserId = UserId;
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 

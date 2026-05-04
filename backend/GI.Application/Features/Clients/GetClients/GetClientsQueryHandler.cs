@@ -2,6 +2,7 @@
 using GI.Application.DataTransferObjects.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace GI.Application.Features.Clients.GetClients
 {
@@ -11,10 +12,22 @@ namespace GI.Application.Features.Clients.GetClients
         public GetClientsQueryHandler(IAppDbContext appDbContext) => _appDbContext = appDbContext;
         public async Task<IList<ClientDto>> Handle(GetClientsQuery request, CancellationToken cancellationToken)
         {
-            return await _appDbContext.Clients
-            .Where(c => c.UserId == request.UserId)
-            .OrderByDescending(c => c.CreatedOn)
-            .Select(c => new ClientDto
+            request.AssignDefaultValues("CreatedOn");
+
+            var dbQuery = _appDbContext.Clients
+            .Where(c => c.UserId == request.UserId);
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                dbQuery = dbQuery.Where(x => EF.Functions.Like(x.Name, $"%{request.Search}%")
+                || EF.Functions.Like(x.Gstin, $"%{request.Search}%")
+                || EF.Functions.Like(x.Email, $"%{request.Search}%")
+                || EF.Functions.Like(x.Address, $"%{request.Search}%")
+                || EF.Functions.Like(x.State, $"%{request.Search}%"));
+            }
+            dbQuery = dbQuery.OrderBy($"{request.Sort} {request.Order}");
+
+            return await dbQuery.Select(c => new ClientDto
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -23,8 +36,7 @@ namespace GI.Application.Features.Clients.GetClients
                 Address = c.Address,
                 State = c.State,
                 CreatedAt = c.CreatedOn
-            })
-            .ToListAsync(cancellationToken);
+            }).Skip(request.RecordToSkip()).Take(request.PageSize).ToListAsync();
         }
     }
 }

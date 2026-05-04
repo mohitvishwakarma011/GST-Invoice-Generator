@@ -3,5 +3,8 @@ using MediatR;
 
 namespace GI.Application.Features.Clients.GetClients
 {
-    public record GetClientsQuery(int UserId) : IRequest<IList<ClientDto>>;
+    public class GetClientsQuery :BasePaginationQuery, IRequest<IList<ClientDto>>
+    {
+        public int UserId { get; set; }
+    }
 }
