@@ -5,9 +5,14 @@ body {
     --app-muted-rule: #E8E4D8;
     --app-stamp: #3E3A8C;
 
-    --primary: #2A2F3D; //Butons, Primary actions
-    --primary-foreground: #FAFAFB; //Text on Primary
-    --muted-foreground: #6B7280; //Secondary/Helper Text
-    --destructive: #DC2626; //Errors
-    --border: #E2E5EB //Input Borders
+    /* Butons, Primary actions */
+    --primary: #2A2F3D;
+    /* Text on Primary */
+    --primary-foreground: #FAFAFB; 
+    /* Secondary/Helper Text */
+    --muted-foreground: #6B7280;
+    /* Errors */
+    --destructive: #DC2626;
+    /* Input Borders */
+    --border: #E2E5EB
 }
