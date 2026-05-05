@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-resource-not-found',
   standalone: false,
   templateUrl: './resource-not-found.component.html',
-  styleUrl: './resource-not-found.scss',
+  styleUrl: './resource-not-found.component.scss',
 })
 export class ResourceNotFoundComponent {
 
