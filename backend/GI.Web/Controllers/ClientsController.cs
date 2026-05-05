@@ -2,7 +2,6 @@
 using GI.Application.Features.Clients.CreateClient;
 using GI.Application.Features.Clients.DeleteClient;
 using GI.Application.Features.Clients.GetClients;
-using GI.Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

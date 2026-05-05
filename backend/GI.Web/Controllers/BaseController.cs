@@ -15,7 +15,7 @@ namespace GI.Web.Controllers
             var parseResult = int.TryParse(uid, out var result);
             if (!parseResult)
             {
-                throw new KeyNotFoundException("Invalid UserId in token");
+                throw new KeyNotFoundException("Unauthorized user.");
             }
             UserId = result;
         }

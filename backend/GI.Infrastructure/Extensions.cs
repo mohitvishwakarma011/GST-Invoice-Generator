@@ -45,7 +45,9 @@ namespace GI.Infrastructure
                         ValidIssuer = jwt["Issuer"],
                         ValidAudience = jwt["Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(jwt["SecretKey"]!))
+                            Encoding.UTF8.GetBytes(jwt["SecretKey"]!)),
+
+                        //ClockSkew = TimeSpan.Zero //Without this there will be extra 5 mins grace time will be added to the token
                     };
                 });
         }
