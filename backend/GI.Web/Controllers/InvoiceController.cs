@@ -13,7 +13,7 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateInvoice([FromBody]CreateInvoiceCommand command)
         {
-                
+                return Ok(await mediator.Send(command));
         }
     }
 }

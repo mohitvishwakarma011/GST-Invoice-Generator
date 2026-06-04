@@ -7,7 +7,7 @@ namespace GI.Application.Features.Invoice.CreateInvoice
     {
         public Task<int> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            
+            return Task.FromResult(0);
         }
     }
 }
