@@ -34,6 +34,8 @@ namespace GI.Infrastructure.EntityConfigs
             builder.Property(x => x.State)
                    .IsRequired()
                    .HasMaxLength(100);
+            builder.Property(x => x.StateCode)
+                .IsRequired();
 
             builder.Property(x => x.BankName)
                    .HasMaxLength(100);

@@ -18,6 +18,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice
         {
             //Check whether the client exists
             var client = await _appDbContext.Clients.SingleOrDefaultAsync(x => x.Id == request.ClientId);
+            var user = await _appDbContext.Users.SingleOrDefaultAsync(_ => _.Id == request.UserId);
             if (client == null)
             {
                 throw new KeyNotFoundException("Client does not exist");
@@ -32,7 +33,34 @@ namespace GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice
                 Notes = request.Notes
             };
             var subTotal = request.Items.Sum(x => x.Quantity * x.Rate);
-            return await Task.FromResult(new CreateInvoiceDto());
+            if(user.StateCode == client.StateCode)
+            {
+                invoice.Sgst = subTotal * Tax.StateTax;
+                invoice.Cgst = subTotal * Tax.StateTax;
+                invoice.Igst = 0;
+            }
+            else
+            {
+                invoice.Sgst = 0;
+                invoice.Cgst = 0;
+                invoice.Igst = subTotal * Tax.CentralTax;
+            }
+            invoice.Total = invoice.Subtotal + invoice.Cgst + invoice.Igst + invoice.Sgst;
+
+            //Create InvoiceItem List
+            var invoiceList = request.Items.Select(x => new InvoiceItem
+            {
+                InvoiceNumber = invoice.InvoiceNumber,
+                Description = x.Description,
+                HsnCode = x.HsnCode,
+                Quantity = x.Quantity,
+                Rate = x.Rate,
+                Amount = x.Quantity * x.Rate,
+            }).ToList();
+            invoice.Items = invoiceList;
+            _appDbContext.Invoices.Add(invoice);
+            await _appDbContext.SaveChangesAsync();
+            return new CreateInvoiceDto();
         }
     }
 }

@@ -13,7 +13,8 @@ namespace GI.Infrastructure.EntityConfigs
             builder.Property(c => c.Name).IsRequired().HasMaxLength(200);
             builder.Property(c => c.Gstin).HasMaxLength(15);
             builder.Property(c => c.State).IsRequired().HasMaxLength(100);
-
+            builder.Property(x => x.StateCode)
+                .IsRequired();
             builder.HasOne(c => c.User)
              .WithMany(u => u.Clients)
              .HasForeignKey(c => c.UserId)
