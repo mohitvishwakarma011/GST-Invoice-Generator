@@ -19,7 +19,6 @@ npm-debug.log*
 .env
 .env.*
 !.env.example
-appsettings.Development.json
 # Note: Some teams commit Development.json, but never commit 
 # appsettings.Production.json or secrets.json.
 secrets.json
