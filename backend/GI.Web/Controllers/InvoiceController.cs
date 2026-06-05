@@ -1,4 +1,4 @@
-﻿using GI.Application.Features.Invoice.CreateInvoice;
+﻿using GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +13,8 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateInvoice([FromBody]CreateInvoiceCommand command)
         {
-                return Ok(await mediator.Send(command));
+            command.UserId = UserId;
+            return Ok(await mediator.Send(command));
         }
     }
 }

@@ -2,6 +2,8 @@
 using GI.Application.Common.Interfaces;
 using GI.Infrastructure.Data;
 using GI.Infrastructure.Services;
+using GI.Web.Behaviors;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,11 +25,18 @@ namespace GI.Infrastructure
             ConfigureJwt(services, configuration);
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly));
             services.AddValidatorsFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly);
+            ConfigureValidator(services);
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
+        }
+
+        private static void ConfigureValidator(IServiceCollection services)
+        {
+            services.AddTransient(typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>));
         }
 
         private static void ConfigureJwt(IServiceCollection services, IConfiguration configuration)

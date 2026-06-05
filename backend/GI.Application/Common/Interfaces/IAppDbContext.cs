@@ -9,6 +9,7 @@ namespace GI.Application.Common.Interfaces
         DbSet<Client> Clients { get; set; }
         DbSet<Invoice> Invoices { get; set; }
         DbSet<InvoiceItem> InvoiceItems { get; set; }
+        DbSet<State> States { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
