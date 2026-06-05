@@ -3,7 +3,7 @@ using MediatR;
 
 namespace GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice
 {
-    public class CreateInvoiceCommand : IRequest<CreateInvoiceDto>
+    public class CreateInvoiceCommand : IRequest<int>
     {
         public int UserId { get; set; }
         public int ClientId { get; set; }

@@ -22,7 +22,8 @@ namespace GI.Application.Features.Clients.GetClients
                 dbQuery = dbQuery.Where(x => EF.Functions.Like(x.Name, $"%{request.Search}%")
                 || EF.Functions.Like(x.Gstin, $"%{request.Search}%")
                 || EF.Functions.Like(x.Email, $"%{request.Search}%")
-                || EF.Functions.Like(x.Address, $"%{request.Search}%")
+                || EF.Functions.Like(x.BillingAddress, $"%{request.Search}%")
+                || EF.Functions.Like(x.ShippingAddress, $"%{request.Search}%")
                 || EF.Functions.Like(x.State, $"%{request.Search}%"));
             }
             dbQuery = dbQuery.OrderBy($"{request.Sort} {request.Order}");
@@ -33,7 +34,8 @@ namespace GI.Application.Features.Clients.GetClients
                 Name = c.Name,
                 Gstin = c.Gstin,
                 Email = c.Email,
-                Address = c.Address,
+                ShippingAddress = c.ShippingAddress??"",
+                BillingAddress = c.BillingAddress,
                 State = c.State,
                 CreatedAt = c.CreatedOn
             }).Skip(request.RecordToSkip()).Take(request.PageSize).ToListAsync();

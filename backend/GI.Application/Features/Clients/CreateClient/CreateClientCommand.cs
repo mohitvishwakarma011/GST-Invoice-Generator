@@ -3,12 +3,14 @@ using MediatR;
 
 namespace GI.Application.Features.Clients.CreateClient
 {
-    public record CreateClientCommand(
-     int UserId,
-     string Name,
-     string? Gstin,
-     string Email,
-     string Address,
-     string State
-    ) : IRequest<ClientDto>;
+    public class CreateClientCommand : IRequest<ClientDto>
+    {
+        public int UserId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Gstin { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string BillingAddress { get; set; } = string.Empty;
+        public string ShippingAddress {  get; set; } = string.Empty;
+        public int StateCode { get; set; }
+    }
 }

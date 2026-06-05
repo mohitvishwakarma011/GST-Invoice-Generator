@@ -2,6 +2,7 @@
 using GI.Application.DataTransferObjects.Client;
 using GI.Core.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace GI.Application.Features.Clients.CreateClient
 {
@@ -15,14 +16,21 @@ namespace GI.Application.Features.Clients.CreateClient
 
         public async Task<ClientDto> Handle(CreateClientCommand request, CancellationToken ct)
         {
+            var state = await _appDbContext.States.SingleOrDefaultAsync(x => x.Code == request.StateCode) ??
+                        throw new InvalidOperationException("Invalid State Code");
+
             var client = new Client
             {
                 UserId = request.UserId,
                 Name = request.Name.Trim(),
                 Gstin = request.Gstin?.ToUpper().Trim(),
                 Email = request.Email.ToLower().Trim(),
-                Address = request.Address.Trim(),
-                State = request.State.Trim()
+                BillingAddress = request.BillingAddress.Trim(),
+                ShippingAddress = request.ShippingAddress.Trim(),
+                State = state.Name,
+                StateCode = state.Code,
+                CreatedBy = request.UserId,
+                CreatedOn = DateTime.UtcNow
             };
 
             _appDbContext.Clients.Add(client);
@@ -37,8 +45,10 @@ namespace GI.Application.Features.Clients.CreateClient
             Name = c.Name,
             Gstin = c.Gstin,
             Email = c.Email,
-            Address = c.Address,
+            BillingAddress = c.BillingAddress,
+            ShippingAddress = c.ShippingAddress ?? "",
             State = c.State,
+            StateCode = c.StateCode,
             CreatedAt = c.CreatedOn
         };
     }
