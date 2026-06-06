@@ -23,7 +23,7 @@ namespace GI.Web.Behaviors
 
             if (failures.Any())
             {
-                throw new ValidationException(failures);
+                throw new ValidationException(string.Join(",", failures.ToArray()));
             }
 
             return await next();

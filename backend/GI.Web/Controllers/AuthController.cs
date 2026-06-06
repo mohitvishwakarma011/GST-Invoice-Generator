@@ -40,6 +40,7 @@ namespace GI.Web.Controllers
         [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody]RefreshAccessTokenCommand command)
         {
             return Ok(await _mediator.Send(command));
