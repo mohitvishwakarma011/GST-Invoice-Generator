@@ -40,15 +40,15 @@ namespace GI.Infrastructure.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public RefreshToken GenerateRefreshToken(int userId)
+        public RefreshToken GenerateRefreshToken(User user)
         {
             var token = new RefreshToken
             {
-                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)).Replace('+','-').Replace('/','c').Replace('=','o'),
                 ExpiresAt = DateTime.UtcNow.AddDays(int.Parse(jwtSection[JWT.RefreshTokenExpiry]!)),
                 CreatedAt = DateTime.UtcNow,
                 IsRevoked = false,
-                UserId = userId
+                User = user
             };
 
             return token;

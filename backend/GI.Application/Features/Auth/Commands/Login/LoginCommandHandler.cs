@@ -27,7 +27,7 @@ namespace GI.Application.Features.Auth.Commands.Login
 
             //revoke all unrevoked refresh Token
             await _db.RefreshTokens.Where(x => x.IsRevoked == false && x.UserId == user.Id).ExecuteUpdateAsync(setters => setters.SetProperty(t => t.IsRevoked,true));
-            var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
+            var refreshToken = _tokenService.GenerateRefreshToken(user);
             _db.RefreshTokens.Add(refreshToken);
             await _db.SaveChangesAsync();
 

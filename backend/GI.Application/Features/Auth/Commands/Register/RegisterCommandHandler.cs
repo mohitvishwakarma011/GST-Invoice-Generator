@@ -36,9 +36,8 @@ namespace GI.Application.Features.Auth.Commands.Register
             };
 
             _appDbContext.Users.Add(user);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
+            var refreshToken = _tokenService.GenerateRefreshToken(user);
             _appDbContext.RefreshTokens.Add(refreshToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
