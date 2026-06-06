@@ -4,6 +4,7 @@ namespace GI.Application.Common.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        string GenerateAccessToken(User user);
+        RefreshToken GenerateRefreshToken(int userId);
     }
 }

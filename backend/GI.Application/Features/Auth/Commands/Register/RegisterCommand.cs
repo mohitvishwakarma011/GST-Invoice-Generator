@@ -3,12 +3,13 @@ using MediatR;
 
 namespace GI.Application.Features.Auth.Commands.Register
 {
-    public record RegisterCommand(
-        string Email,
-        string Password,
-        string BusinessName,
-        string Gstin,
-        string Address,
-        string State
-        ) : IRequest<AuthResponse>;
+    public class RegisterCommand : IRequest<AuthResponse>
+    {
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string BusinessName { get; set; } = null!;
+        public string Gstin { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        public int StateId { get; set; }
+    }
 }

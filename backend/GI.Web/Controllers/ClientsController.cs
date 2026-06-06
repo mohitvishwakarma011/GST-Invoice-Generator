@@ -3,6 +3,7 @@ using GI.Application.Features.Clients.CreateClient;
 using GI.Application.Features.Clients.DeleteClient;
 using GI.Application.Features.Clients.GetClients;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GI.Web.Controllers
@@ -18,6 +19,7 @@ namespace GI.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] GetClientsQuery query)
         {
             query.UserId = UserId;
@@ -26,6 +28,7 @@ namespace GI.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(CreateClientCommand request)
         {
             request.UserId = UserId;
@@ -34,6 +37,7 @@ namespace GI.Web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             await _mediator.Send(new DeleteClientCommand(ClientId: id, UserId: UserId));

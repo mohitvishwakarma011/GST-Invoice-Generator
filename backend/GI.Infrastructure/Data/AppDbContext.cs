@@ -17,6 +17,7 @@ namespace GI.Infrastructure.Data
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfig());
@@ -24,6 +25,7 @@ namespace GI.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new InvoiceConfig());
             modelBuilder.ApplyConfiguration(new InvoiceItemConfig());
             modelBuilder.ApplyConfiguration(new StateConfig());
+            modelBuilder.ApplyConfiguration(new RefreshTokenConfig());
         }
     }
 }

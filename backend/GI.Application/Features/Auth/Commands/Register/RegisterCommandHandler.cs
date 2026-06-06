@@ -21,8 +21,9 @@ namespace GI.Application.Features.Auth.Commands.Register
          {
             bool emailExists = await _appDbContext.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
             if (emailExists)
-                throw new InvalidOperationException("Email already registered.");
-
+                throw new InvalidOperationException("An account with this email already exists.");
+            var state = (await _appDbContext.States.SingleOrDefaultAsync(x => x.Code == request.StateId, cancellationToken)) ?? 
+                         throw new KeyNotFoundException("Invalid state code.");
             var user = new User
             {
                 Email = request.Email.ToLower().Trim(),
@@ -30,15 +31,22 @@ namespace GI.Application.Features.Auth.Commands.Register
                 BusinessName = request.BusinessName,
                 Gstin = request.Gstin.ToUpper().Trim(),
                 Address = request.Address,
-                State = request.State
+                StateCode = state.Code,
+                State = state.Name
             };
 
             _appDbContext.Users.Add(user);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
+            var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
+            _appDbContext.RefreshTokens.Add(refreshToken);
+            await _appDbContext.SaveChangesAsync(cancellationToken);
+
             return new AuthResponse
             {
-                Token = _tokenService.GenerateToken(user),
+                AccessToken = _tokenService.GenerateAccessToken(user),
+                RefreshToken = refreshToken.Token,
+                RefreshTokenExpiry = refreshToken.ExpiresAt,
                 Email = user.Email,
                 BusinessName = user.BusinessName
             };

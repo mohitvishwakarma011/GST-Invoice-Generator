@@ -16,7 +16,8 @@
         public string? UpiId { get; set; }
 
         // Navigation
-        public ICollection<Client> Clients { get; set; } = new List<Client>();
-        public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+        public ICollection<Client> Clients { get; set; } = [];
+        public ICollection<Invoice> Invoices { get; set; } = [];
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
     }
 }

@@ -3,8 +3,8 @@ using GI.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace GI.Infrastructure.Services
@@ -12,29 +12,46 @@ namespace GI.Infrastructure.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private IConfigurationSection jwtSection { get; set; }
+        public TokenService(IConfiguration configuration) { 
+            _configuration = configuration;
+            jwtSection = _configuration.GetSection(JWT.JwtSetting);
+        }
 
-        public TokenService(IConfiguration configuration) => _configuration = configuration;
-        public string GenerateToken(User user)
+        public string GenerateAccessToken(User user)
         {
-            var jwt = _configuration.GetSection("JwtSettings");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection[JWT.SecretKey]!));
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim("businessName", user.BusinessName)
+                new Claim(UserClaims.BusinessName, user.BusinessName)
             };
 
             var token = new JwtSecurityToken(
-                issuer: jwt["Issuer"],
-                audience: jwt["Audience"],
+                issuer: jwtSection[JWT.Issuer],
+                audience: jwtSection[JWT.Audience],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiryMins"]!)),
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwtSection[JWT.AccessTokenExpiry]!)),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public RefreshToken GenerateRefreshToken(int userId)
+        {
+            var token = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                ExpiresAt = DateTime.UtcNow.AddDays(int.Parse(jwtSection[JWT.RefreshTokenExpiry]!)),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false,
+                UserId = userId
+            };
+
+            return token;
         }
     }
 }
