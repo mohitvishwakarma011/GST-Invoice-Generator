@@ -14,6 +14,7 @@ namespace GI.Infrastructure.EntityConfigs
                 .IsRequired();
             builder.Property(x => x.UpdatedOn)
                 .IsRequired(false);
+            builder.Property(x => x.EntityStatus).HasDefaultValue(EntityStatus.Active);
         }
     }
 }

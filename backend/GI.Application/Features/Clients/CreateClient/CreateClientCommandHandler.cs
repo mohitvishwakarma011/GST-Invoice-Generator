@@ -49,7 +49,7 @@ namespace GI.Application.Features.Clients.CreateClient
             ShippingAddress = c.ShippingAddress ?? "",
             State = c.State,
             StateCode = c.StateCode,
-            CreatedAt = c.CreatedOn
+            CreatedOn = c.CreatedOn
         };
     }
 }

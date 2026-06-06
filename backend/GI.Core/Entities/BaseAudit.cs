@@ -6,5 +6,6 @@
         public int UpdatedBy { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedOn { get; set; }
+        public EntityStatus EntityStatus { get; set; } = EntityStatus.Active;
     }
 }

@@ -18,16 +18,9 @@ namespace GI.Web.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAll([FromQuery] GetClientsQuery query)
-        {
-            query.UserId = UserId;
-            var result = await _mediator.Send(query);
-            return Ok(result);
-        }
-
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         public async Task<IActionResult> Create(CreateClientCommand request)
         {
@@ -36,7 +29,20 @@ namespace GI.Web.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetAll([FromQuery] GetClientsQuery query)
+        {
+            query.UserId = UserId;
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {

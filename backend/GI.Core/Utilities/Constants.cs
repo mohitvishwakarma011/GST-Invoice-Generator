@@ -25,3 +25,9 @@ public struct UserClaims
 {
     public const string BusinessName = "businessName";
 }
+
+public enum EntityStatus
+{
+    Deleted,
+    Active
+}

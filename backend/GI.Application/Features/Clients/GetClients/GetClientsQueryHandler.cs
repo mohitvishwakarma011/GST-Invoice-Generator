@@ -37,7 +37,8 @@ namespace GI.Application.Features.Clients.GetClients
                 ShippingAddress = c.ShippingAddress??"",
                 BillingAddress = c.BillingAddress,
                 State = c.State,
-                CreatedAt = c.CreatedOn
+                StateCode = c.StateCode,
+                CreatedOn = c.CreatedOn
             }).Skip(request.RecordToSkip()).Take(request.PageSize).ToListAsync();
         }
     }

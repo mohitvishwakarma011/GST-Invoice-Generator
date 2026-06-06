@@ -10,6 +10,6 @@
         public string ShippingAddress { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public int StateCode { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

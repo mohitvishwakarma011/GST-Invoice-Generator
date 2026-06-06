@@ -14,7 +14,7 @@ namespace GI.Application.Features.Clients.DeleteClient
 
             if (client is null)
             {
-                throw new KeyNotFoundException("Client not found.");
+                throw new KeyNotFoundException("Client does not exist.");
             }
 
             _appDbContext.Clients.Remove(client);
