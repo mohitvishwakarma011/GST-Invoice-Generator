@@ -26,10 +26,10 @@ namespace GI.Application.Features.Auth.Commands.Login
                 throw new UnauthorizedAccessException("Invalid email or password.");
 
             //revoke all unrevoked refresh Token
-            await _db.RefreshTokens.Where(x => x.IsRevoked == false && x.UserId == user.Id).ExecuteUpdateAsync(setters => setters.SetProperty(t => t.IsRevoked,true));
+            await _db.RefreshTokens.Where(x => x.IsRevoked == false && x.UserId == user.Id).ExecuteUpdateAsync(setters => setters.SetProperty(t => t.IsRevoked,true),ct);
             var refreshToken = _tokenService.GenerateRefreshToken(user);
             _db.RefreshTokens.Add(refreshToken);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(ct);
 
             return new AuthResponse
             {

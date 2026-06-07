@@ -12,7 +12,7 @@ namespace GI.Web.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ISender _mediator;
-        public AuthController(ISender mediator,IHttpContextAccessor httpContextAccessor)
+        public AuthController(ISender mediator)
         {
             _mediator = mediator;
         }
@@ -20,7 +20,6 @@ namespace GI.Web.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterCommand command)
         {
             var result = await _mediator.Send(command);
@@ -30,7 +29,6 @@ namespace GI.Web.Controllers
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginCommand command)
         {
             var result = await _mediator.Send(command);
@@ -40,7 +38,6 @@ namespace GI.Web.Controllers
         [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody]RefreshAccessTokenCommand command)
         {
             return Ok(await _mediator.Send(command));

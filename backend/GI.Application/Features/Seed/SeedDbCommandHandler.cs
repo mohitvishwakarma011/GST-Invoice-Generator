@@ -9,10 +9,10 @@ namespace GI.Application.Features.Seed
     {
         public async Task Handle(SeedDbCommand request, CancellationToken cancellationToken)
         {
-            var availableCodes = (await appDbContext.States.ToListAsync()).Select(x => x.Code);
+            var availableCodes = (await appDbContext.States.ToListAsync(cancellationToken)).Select(x => x.Code);
             var toBePopulated = GetStates().Where(x => !availableCodes.Contains(x.Code));
             appDbContext.States.AddRange(toBePopulated);
-            await appDbContext.SaveChangesAsync();
+            await appDbContext.SaveChangesAsync(cancellationToken);
         }
 
         private IList<State> GetStates()
