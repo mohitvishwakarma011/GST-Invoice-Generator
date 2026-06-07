@@ -15,7 +15,6 @@
         public decimal Sgst { get; set; }      // used when intra-state
         public decimal Igst { get; set; }      // used when inter-state
         public decimal Total { get; set; }
-
         public string? Notes { get; set; }
 
         // Navigation
