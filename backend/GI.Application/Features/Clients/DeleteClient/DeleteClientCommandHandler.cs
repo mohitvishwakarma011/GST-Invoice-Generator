@@ -16,8 +16,7 @@ namespace GI.Application.Features.Clients.DeleteClient
             {
                 throw new KeyNotFoundException("Client does not exist.");
             }
-
-            _appDbContext.Clients.Remove(client);
+            client.EntityStatus = EntityStatus.Deleted;
             await _appDbContext.SaveChangesAsync();
         }
     }

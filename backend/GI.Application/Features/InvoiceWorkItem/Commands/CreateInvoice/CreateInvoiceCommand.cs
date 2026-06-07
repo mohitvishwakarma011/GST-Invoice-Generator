@@ -1,5 +1,4 @@
-﻿using GI.Application.DataTransferObjects.InvoiceWorkItem;
-using MediatR;
+﻿using MediatR;
 
 namespace GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice
 {

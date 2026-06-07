@@ -15,7 +15,7 @@ namespace GI.Application.Features.Clients.GetClients
             request.AssignDefaultValues("CreatedOn");
 
             var dbQuery = _appDbContext.Clients
-            .Where(c => c.UserId == request.UserId);
+            .Where(c => c.UserId == request.UserId && c.EntityStatus != EntityStatus.Deleted);
 
             if (!string.IsNullOrEmpty(request.Search))
             {

@@ -16,7 +16,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice
     {
         public CreateInvoiceItemDtoValidator()
         {
-            RuleFor(x => x.Rate).GreaterThanOrEqualTo(0);
+            RuleFor(x => x.Rate).GreaterThan(0);
             RuleFor(x => x.Quantity).GreaterThan(0);
             RuleFor(x => x.Description).NotEmpty();
         }

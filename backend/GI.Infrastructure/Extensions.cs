@@ -56,7 +56,7 @@ namespace GI.Infrastructure
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwt["SecretKey"]!)),
 
-                        //ClockSkew = TimeSpan.Zero //Without this there will be extra 5 mins grace time will be added to the token
+                        ClockSkew = TimeSpan.Zero //Without this there will be extra 5 mins grace time will be added to the token
                     };
                 });
         }

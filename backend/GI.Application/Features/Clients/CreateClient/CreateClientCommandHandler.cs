@@ -26,11 +26,12 @@ namespace GI.Application.Features.Clients.CreateClient
                 Gstin = request.Gstin?.ToUpper().Trim(),
                 Email = request.Email.ToLower().Trim(),
                 BillingAddress = request.BillingAddress.Trim(),
-                ShippingAddress = request.ShippingAddress.Trim(),
+                ShippingAddress = request.ShippingAddress?.Trim(),
                 State = state.Name,
                 StateCode = state.Code,
                 CreatedBy = request.UserId,
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = DateTime.UtcNow,
+                EntityStatus = EntityStatus.Active
             };
 
             _appDbContext.Clients.Add(client);
@@ -46,7 +47,7 @@ namespace GI.Application.Features.Clients.CreateClient
             Gstin = c.Gstin,
             Email = c.Email,
             BillingAddress = c.BillingAddress,
-            ShippingAddress = c.ShippingAddress ?? "",
+            ShippingAddress = c.ShippingAddress,
             State = c.State,
             StateCode = c.StateCode,
             CreatedOn = c.CreatedOn
