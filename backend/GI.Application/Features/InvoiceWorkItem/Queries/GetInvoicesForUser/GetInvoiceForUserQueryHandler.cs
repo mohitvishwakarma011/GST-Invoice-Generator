@@ -15,7 +15,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser
 
         public async Task<IList<InvoiceListDto>> Handle(GetInvoicesForUserQuery request, CancellationToken cancellationToken)
         {
-            return await _appDbContext.Invoices.AsNoTracking().Where(x => x.UserId == request.UserId).OrderByDescending(x => x.CreatedOn).
+            return await _appDbContext.Invoices.AsNoTracking().Where(x => x.UserId == request.UserId && x.EntityStatus != EntityStatus.Deleted).OrderByDescending(x => x.CreatedOn).
                 Select(x => new InvoiceListDto
                 {
                     ClientName = x.Client.Name,

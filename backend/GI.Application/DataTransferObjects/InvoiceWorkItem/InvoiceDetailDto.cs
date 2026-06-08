@@ -1,24 +1,23 @@
-﻿namespace GI.Core.Entities
+﻿using GI.Application.DataTransferObjects.Client;
+
+namespace GI.Application.DataTransferObjects.InvoiceWorkItem
 {
-    public class Invoice : BaseAudit
+    public class InvoiceDetailDto
     {
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ClientId { get; set; }
         public string InvoiceNumber { get; set; } = string.Empty;
+        public DateTime CreatedOn { get; set; }
         public DateTime DueDate { get; set; }
-        public InvoiceStatus Status { get; set; } = InvoiceStatus.Draft;
-
+        public InvoiceStatus Status { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Cgst { get; set; }      // used when intra-state
         public decimal Sgst { get; set; }      // used when intra-state
         public decimal Igst { get; set; }      // used when inter-state
         public decimal Total { get; set; }
         public string? Notes { get; set; }
-
-        // Navigation
-        public User User { get; set; } = null!;
-        public Client Client { get; set; } = null!;
-        public ICollection<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
+        public ClientDto Client { get; set; } = null!;
+        public IList<InvoiceItemDto> Items { get; set; } = [];
     }
 }

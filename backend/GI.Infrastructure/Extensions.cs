@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using GI.Application.Common.Interfaces;
+using GI.Application.Common.Mappings;
 using GI.Infrastructure.Data;
 using GI.Infrastructure.Services;
 using GI.Web.Behaviors;
@@ -26,6 +27,7 @@ namespace GI.Infrastructure
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly));
             services.AddValidatorsFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly);
             ConfigureValidator(services);
+            services.AddAutoMapper(x => x.AddProfile(typeof(MappingProfile)));
         }
 
         private static void ConfigureServices(IServiceCollection services)
