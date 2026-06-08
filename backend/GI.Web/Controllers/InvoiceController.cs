@@ -1,5 +1,6 @@
 ﻿using GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice;
 using GI.Application.Features.InvoiceWorkItem.Commands.DeleteInvoice;
+using GI.Application.Features.InvoiceWorkItem.Commands.UpdateInvoiceStatus;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoiceById;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser;
 using MediatR;
@@ -52,6 +53,16 @@ namespace GI.Web.Controllers
             var query = new DeleteInvoiceCommand { UserId = UserId, InvoiceId = id };
             await mediator.Send(query);
             return NoContent();
+        }
+
+        [HttpPatch("status")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> UpdateInvoiceStatus([FromBody] UpdateInvoiceStatusCommand command)
+        {
+            command.UserId = UserId;
+            return Ok(await mediator.Send(command));
         }
     }
 }
