@@ -15,6 +15,13 @@ namespace GI.Web.Middleware
             {
                 await _next(context);
             }
+            catch (FluentValidation.ValidationException ex)
+            {
+                context.Response.ContentType = "application/json";
+
+                var response = JsonSerializer.Serialize(ex.Errors.Select(x => new { Property = x.PropertyName, Message = x.ErrorMessage }));
+                await context.Response.WriteAsync(response);
+            }
             catch (Exception ex)
             {
                 context.Response.ContentType = "application/json";
