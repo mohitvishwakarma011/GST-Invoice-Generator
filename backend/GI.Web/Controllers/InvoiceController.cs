@@ -1,8 +1,11 @@
-﻿using GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice;
+﻿using GI.Application.Common.Interfaces;
+using GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice;
 using GI.Application.Features.InvoiceWorkItem.Commands.DeleteInvoice;
 using GI.Application.Features.InvoiceWorkItem.Commands.UpdateInvoiceStatus;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoiceById;
+using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicePdf;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser;
+using GI.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +14,13 @@ namespace GI.Web.Controllers
 {
     [Route("api/invoice")]
     [ApiController]
-    public class InvoiceController(IHttpContextAccessor accessor,ISender mediator) : BaseController(accessor)
+    public class InvoiceController(IHttpContextAccessor accessor, ISender mediator, IPdfService pdfService) : BaseController(accessor)
     {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        public async Task<IActionResult> CreateInvoice([FromBody]CreateInvoiceCommand command)
+        public async Task<IActionResult> CreateInvoice([FromBody] CreateInvoiceCommand command)
         {
             command.UserId = UserId;
             return Ok(await mediator.Send(command));
@@ -38,9 +41,9 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        public async Task<IActionResult> GetInvoiceById([FromRoute]int id)
+        public async Task<IActionResult> GetInvoiceById([FromRoute] int id)
         {
-            var query = new GetInvoiceByIdQuery { InvoiceId = id, UserId = UserId};
+            var query = new GetInvoiceByIdQuery { InvoiceId = id, UserId = UserId };
             return Ok(await mediator.Send(query));
         }
 
@@ -63,6 +66,18 @@ namespace GI.Web.Controllers
         {
             command.UserId = UserId;
             return Ok(await mediator.Send(command));
+        }
+
+        [HttpPost("pdf")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetInvoicePdf([FromBody] GetInvoicePdfQuery query)
+        {
+            query.UserId = UserId;
+            var result = await mediator.Send(query);
+            var bytes = pdfService.GenerateInvoicePdf(result);
+            return File(bytes, "application/pdf", $"{result.InvoiceNumber}.pdf");
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
+using GI.Application.Common.Behaviors;
 using GI.Application.Common.Interfaces;
 using GI.Application.Common.Mappings;
 using GI.Infrastructure.Data;
 using GI.Infrastructure.Services;
-using GI.Web.Behaviors;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using QuestPDF.Infrastructure;
 using System.Text;
 namespace GI.Infrastructure
 {
@@ -28,11 +29,18 @@ namespace GI.Infrastructure
             services.AddValidatorsFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly);
             ConfigureValidator(services);
             services.AddAutoMapper(x => x.AddProfile(typeof(MappingProfile)));
+            ConfigureQuestPdf(services);
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
+        }
+
+        private static void ConfigureQuestPdf(IServiceCollection services)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            services.AddScoped<IPdfService, PdfService>();
         }
 
         private static void ConfigureValidator(IServiceCollection services)

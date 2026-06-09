@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GI.Application.DataTransferObjects.Client;
 using GI.Application.DataTransferObjects.InvoiceWorkItem;
+using GI.Application.DataTransferObjects.User;
 using GI.Core.Entities;
 
 namespace GI.Application.Common.Mappings
@@ -12,6 +13,9 @@ namespace GI.Application.Common.Mappings
             CreateMap<Invoice,InvoiceDetailDto>().ReverseMap();
             CreateMap<InvoiceItem,InvoiceItemDto>().ReverseMap();
             CreateMap<Client,ClientDto>().ReverseMap();
+            CreateMap<User, UserDetailDto>().ReverseMap();
+            CreateMap<InvoiceDetailDto, InvoiceDetailForPdfDto>().ReverseMap();
+            CreateMap<Invoice, InvoiceDetailForPdfDto>().ReverseMap();
         }
     }
 }

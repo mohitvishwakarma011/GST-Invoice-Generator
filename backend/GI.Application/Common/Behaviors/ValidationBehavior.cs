@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace GI.Web.Behaviors
+namespace GI.Application.Common.Behaviors
 {
-    public class ValidationBehavior<TRequest, TResponse> :IPipelineBehavior<TRequest,TResponse>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
@@ -15,15 +15,17 @@ namespace GI.Web.Behaviors
         {
             var context = new ValidationContext<TRequest>(request);
 
-            var failures = _validators
-                .Select(v => v.Validate(context))
-                .SelectMany(r => r.Errors)
+            var validationResult = await Task.WhenAll(_validators
+                .Select(v => v.ValidateAsync(context, cancellationToken)));
+
+            var failures =
+                validationResult.SelectMany(r => r.Errors)
                 .Where(f => f != null)
                 .ToList();
 
             if (failures.Any())
             {
-                throw new ValidationException(string.Join(",", failures.ToArray()));
+                throw new ValidationException(failures);
             }
 
             return await next();
