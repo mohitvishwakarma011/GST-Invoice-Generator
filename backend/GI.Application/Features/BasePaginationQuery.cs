@@ -18,7 +18,7 @@
         {
             if (PageSize <= 0) PageSize = 10;
             if (PageIndex < 0) PageIndex = 0;
-            if ((Order != SortOrder.Descending) || (Order != SortOrder.Ascending)){
+            if ((Order != SortOrder.Descending.ToString()) && (Order != SortOrder.Ascending.ToString())){
                 Order = SortOrder.Ascending;
             }
             if (string.IsNullOrEmpty(this.Sort)) this.Sort = Sort;

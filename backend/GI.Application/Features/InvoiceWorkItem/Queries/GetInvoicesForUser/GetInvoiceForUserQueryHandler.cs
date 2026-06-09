@@ -22,7 +22,17 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser
 
             if (!string.IsNullOrEmpty(request.Search))
             {
-                query = query.Where(x => EF.Functions.Like(x.InvoiceNumber,request.Search));
+                query = query.Where(x => EF.Functions.Like(x.InvoiceNumber.ToLower(),request.Search.ToLower())
+                || EF.Functions.Like(x.User.BusinessName.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.User.Address.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.User.State.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.Name.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.Gstin.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.Email.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.BillingAddress.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.State.ToLower(), request.Search.ToLower())
+                || EF.Functions.Like(x.Client.ShippingAddress.ToLower(), request.Search.ToLower())
+                );
             }
 
             query = query.OrderBy($"{request.Sort} {request.Order}");
