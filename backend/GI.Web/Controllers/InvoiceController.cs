@@ -30,9 +30,8 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        public async Task<IActionResult> GetInvoiceList()
+        public async Task<IActionResult> GetInvoiceList([FromQuery]GetInvoicesForUserQuery query)
         {
-            var query = new GetInvoicesForUserQuery();
             query.UserId = UserId;
             return Ok(await mediator.Send(query));
         }

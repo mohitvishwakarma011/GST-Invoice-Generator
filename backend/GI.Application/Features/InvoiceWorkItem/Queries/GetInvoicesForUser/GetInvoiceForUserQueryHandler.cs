@@ -2,6 +2,8 @@
 using GI.Application.DataTransferObjects.InvoiceWorkItem;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+
 
 namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser
 {
@@ -15,8 +17,20 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser
 
         public async Task<IList<InvoiceListDto>> Handle(GetInvoicesForUserQuery request, CancellationToken cancellationToken)
         {
-            return await _appDbContext.Invoices.AsNoTracking().Where(x => x.UserId == request.UserId && x.EntityStatus != EntityStatus.Deleted).OrderByDescending(x => x.CreatedOn).
-                Select(x => new InvoiceListDto
+            request.AssignDefaultValues("CreatedOn");
+            var query = _appDbContext.Invoices.Where(x => x.UserId == request.UserId && x.EntityStatus != EntityStatus.Deleted);
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(x => EF.Functions.Like(x.InvoiceNumber,request.Search));
+            }
+
+            query = query.OrderBy($"{request.Sort} {request.Order}");
+
+            return await query.AsNoTracking()
+                .Skip(request.RecordToSkip())
+                .Take(request.PageSize)
+                .Select(x => new InvoiceListDto
                 {
                     ClientName = x.Client.Name,
                     CreatedOn = x.CreatedOn,
