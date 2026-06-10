@@ -27,9 +27,15 @@ namespace GI.Infrastructure
             ConfigureJwt(services, configuration);
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly));
             services.AddValidatorsFromAssembly(typeof(GI.Application.Features.Auth.Commands.Register.RegisterCommand).Assembly);
-            ConfigureValidator(services);
+            ConfigureBehaviors(services);
             services.AddAutoMapper(x => x.AddProfile(typeof(MappingProfile)));
             ConfigureQuestPdf(services);
+            services.AddMemoryCache(options =>
+            {
+                options.SizeLimit = 1000;
+                options.CompactionPercentage = 0.25;
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
+            }); //Add Caching
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -43,8 +49,9 @@ namespace GI.Infrastructure
             services.AddScoped<IPdfService, PdfService>();
         }
 
-        private static void ConfigureValidator(IServiceCollection services)
+        private static void ConfigureBehaviors(IServiceCollection services)
         {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
         }
