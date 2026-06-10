@@ -1,15 +1,22 @@
 ﻿using GI.Application.Common.Interfaces;
+using GI.Core.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace GI.Application.Features.InvoiceWorkItem.Commands.UpdateInvoiceStatus
 {
     public class UpdateInvoiceStatusCommandHandler : IRequestHandler<UpdateInvoiceStatusCommand, int>
     {
         private readonly IAppDbContext _appDbContext;
-        public UpdateInvoiceStatusCommandHandler(IAppDbContext appDbContext)
+        private readonly IMemoryCache _cache;
+        private readonly ILogger<UpdateInvoiceStatusCommandHandler> _logger;
+        public UpdateInvoiceStatusCommandHandler(IAppDbContext appDbContext,ILogger<UpdateInvoiceStatusCommandHandler> logger,IMemoryCache cache)
         {
             _appDbContext = appDbContext;
+            _cache = cache;
+            _logger = logger;
         }
 
         public async Task<int> Handle(UpdateInvoiceStatusCommand request, CancellationToken cancellationToken)
@@ -31,6 +38,10 @@ namespace GI.Application.Features.InvoiceWorkItem.Commands.UpdateInvoiceStatus
                 default: throw new InvalidOperationException("Invalid status operation.");
             }
             await _appDbContext.SaveChangesAsync(cancellationToken);
+            var key = Helper.GetCachingKey(CachingKeyPrefix.InvoiceById, request.UserId, request.InvoiceId);
+            _cache.Remove(key);
+            _logger.LogInformation($"Key-{key} has been removed from cache");
+
             return invoice.Id;
         }
     }

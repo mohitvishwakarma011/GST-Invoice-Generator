@@ -24,7 +24,7 @@ namespace GI.Application.Features.Clients.GetClients
         {
             request.AssignDefaultValues("CreatedOn");
 
-            var cacheKey = $"uid:{request.UserId}_ps:{request.PageSize}_pi:{request.PageIndex}_s:{request.Sort}_o:{request.Order}_sch:{request.Search}";
+            var cacheKey = $"{nameof(GetClientsQuery)}_uid:{request.UserId}_ps:{request.PageSize}_pi:{request.PageIndex}_s:{request.Sort}_o:{request.Order}_sch:{request.Search}";
 
             //Check Cache if data exist
             if(_cache.TryGetValue(cacheKey,out IList<ClientDto> result)){
@@ -64,7 +64,7 @@ namespace GI.Application.Features.Clients.GetClients
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(1),
                 SlidingExpiration = TimeSpan.FromMinutes(5),
                 Priority = CacheItemPriority.Normal,
-
+                Size = unCachedResult.Count,
             });
 
             _logger.LogInformation($"Handled {nameof(GetClientsQuery)} from DB");

@@ -31,3 +31,8 @@ public enum EntityStatus
     Deleted,
     Active
 }
+
+public struct CachingKeyPrefix
+{
+    public const string InvoiceById = "InvoiceById";
+}
