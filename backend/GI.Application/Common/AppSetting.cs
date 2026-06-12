@@ -1,6 +1,6 @@
 ﻿namespace GI.Application.Common
 {
-    public class AppSetting
+    public static class AppSettings
     {
         public class JwtSetting
         {
@@ -10,7 +10,14 @@
             public string Audience { get; set; } = null!;
             public int ExpiryTime { get; set; }
         }
+    }
 
-
+    public class EmailSettings
+    {
+        public string Host { get; set; } = string.Empty;
+        public int Port { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string FromName { get; set; } = string.Empty;
     }
 }

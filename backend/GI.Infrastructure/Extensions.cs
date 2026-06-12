@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using GI.Application.Common;
 using GI.Application.Common.Behaviors;
 using GI.Application.Common.Interfaces;
 using GI.Application.Common.Mappings;
@@ -36,11 +37,16 @@ namespace GI.Infrastructure
                 options.CompactionPercentage = 0.25;
                 options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
             }); //Add Caching
+            ConfigureOptions(services,configuration);
         }
-
+        private static void ConfigureOptions(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        }
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         private static void ConfigureQuestPdf(IServiceCollection services)
