@@ -8,7 +8,6 @@ import { AppDate } from "./app.date";
     providedIn: 'root'
 })
 export class AppUtils {
-
     private readonly _snackbar = inject(MatSnackBar);
 
     public isUserAuthenticated(): boolean {
@@ -17,8 +16,8 @@ export class AppUtils {
         else {
             var decodedToken: any = this.getDecodedToken();
             if (AppDate.unixToDate(decodedToken.exp) < AppDate.getCurrentDate())
-                return true;
-            else return false;
+                return false;
+            else return true;
         }
     }
 
@@ -47,6 +46,9 @@ export class AppUtils {
     }
 
     private _getToken():string{
-        return localStorage.getItem(Constants.tokenKey);
+        if(typeof window !== 'undefined'){
+            return localStorage.getItem(Constants.tokenKey);
+        }
+        return '';
     }
 }
