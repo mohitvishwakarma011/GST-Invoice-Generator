@@ -29,7 +29,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoiceById
         public async Task<InvoiceDetailDto> Handle(GetInvoiceByIdQuery request, CancellationToken cancellationToken)
         {
             var key = Helper.GetCachingKey(CachingKeyPrefix.InvoiceById, request.UserId, request.InvoiceId);
-            if(_cache.TryGetValue(key,out InvoiceDetailDto cachedResult))
+            if(_cache.TryGetValue(key,out InvoiceDetailDto? cachedResult))
             {
                 _logger.LogInformation($"Handled {nameof(GetInvoiceByIdQuery)} from Cache");
                 return cachedResult!;

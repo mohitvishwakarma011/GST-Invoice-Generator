@@ -1,4 +1,5 @@
 ﻿using GI.Application.DataTransferObjects.InvoiceWorkItem;
+using GI.Application.Features.Global.Queries;
 using MediatR;
 
 namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser

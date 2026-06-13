@@ -15,6 +15,10 @@ namespace GI.Infrastructure.EntityConfigs
             builder.Property(c => c.State).IsRequired().HasMaxLength(100);
             builder.Property(x => x.StateCode)
                 .IsRequired();
+
+            builder.HasIndex(x => new { x.UserId, x.Gstin }).IsUnique();
+            builder.HasIndex(x => new { x.UserId, x.Email }).IsUnique();
+
             builder.HasOne(c => c.User)
              .WithMany(u => u.Clients)
              .HasForeignKey(c => c.UserId)

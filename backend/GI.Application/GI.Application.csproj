@@ -20,4 +20,8 @@
 	  <ProjectReference Include="..\GI.Core\GI.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Global\Commands\" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GI.Application.Features.Clients.DeleteClient
+namespace GI.Application.Features.Clients.Commands.DeleteClient
 {
     public class DeleteClientCommandHandler : IRequestHandler<DeleteClientCommand>
     {

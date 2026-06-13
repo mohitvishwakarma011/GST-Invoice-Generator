@@ -1,4 +1,4 @@
-﻿namespace GI.Application.Features
+﻿namespace GI.Application.Features.Global.Queries
 {
     public class BasePaginationQuery
     {

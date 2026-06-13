@@ -1,0 +1,16 @@
+﻿using MediatR;
+
+namespace GI.Application.Features.Clients.Commands.UpdateClient
+{
+    public class UpdateClientCommand : IRequest
+    {
+        public int UserId { get; set; }
+        public int ClientId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Gstin { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string BillingAddress { get; set; } = string.Empty;
+        public string? ShippingAddress { get; set; } = string.Empty;
+        public int StateCode { get; set; }
+    }
+}

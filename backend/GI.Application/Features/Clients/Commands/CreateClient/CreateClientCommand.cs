@@ -1,7 +1,7 @@
 ﻿using GI.Application.DataTransferObjects.Client;
 using MediatR;
 
-namespace GI.Application.Features.Clients.CreateClient
+namespace GI.Application.Features.Clients.Commands.CreateClient
 {
     public class CreateClientCommand : IRequest<ClientDto>
     {

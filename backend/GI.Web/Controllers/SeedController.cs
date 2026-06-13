@@ -1,6 +1,5 @@
-﻿using GI.Application.Features.Seed;
+﻿using GI.Application.Features.Seed.SeedCommand;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GI.Web.Controllers

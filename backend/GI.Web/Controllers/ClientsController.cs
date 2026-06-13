@@ -1,7 +1,7 @@
-﻿using GI.Application.Features;
-using GI.Application.Features.Clients.CreateClient;
-using GI.Application.Features.Clients.DeleteClient;
-using GI.Application.Features.Clients.GetClients;
+﻿using GI.Application.Features.Clients.Commands.CreateClient;
+using GI.Application.Features.Clients.Commands.DeleteClient;
+using GI.Application.Features.Clients.Commands.UpdateClient;
+using GI.Application.Features.Clients.Queries.GetClients;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +48,17 @@ namespace GI.Web.Controllers
         {
             await _mediator.Send(new DeleteClientCommand(ClientId: id, UserId: UserId));
             return NoContent();
+        }
+
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> UpdateClient(UpdateClientCommand command)
+        {
+            command.UserId = UserId;
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

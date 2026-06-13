@@ -18,7 +18,6 @@ namespace GI.Application.Features.Auth.Commands.Login
 
         public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken ct)
         {
-
             var user = await _db.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email.ToLower(), ct);
 
