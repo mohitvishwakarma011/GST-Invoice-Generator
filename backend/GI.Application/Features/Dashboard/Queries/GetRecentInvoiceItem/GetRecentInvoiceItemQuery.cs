@@ -1,7 +1,7 @@
-﻿using GI.Application.DataTransferObjects.InvoiceWorkItem;
+﻿using GI.Application.DataTransferObjects.Dashboard;
 using MediatR;
 
-namespace GI.Application.Features.InvoiceWorkItem.Queries.GetRecentInvoiceItem
+namespace GI.Application.Features.Dashboard.Queries.GetRecentInvoiceItem
 {
     public class GetRecentInvoiceItemQuery : IRequest<IList<RecentInvoiceItem>>
     {

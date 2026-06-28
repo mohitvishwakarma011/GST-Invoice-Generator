@@ -1,9 +1,9 @@
 ﻿using GI.Application.Common.Interfaces;
-using GI.Application.DataTransferObjects.InvoiceWorkItem;
+using GI.Application.DataTransferObjects.Dashboard;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GI.Application.Features.InvoiceWorkItem.Queries.GetRecentInvoiceItem
+namespace GI.Application.Features.Dashboard.Queries.GetRecentInvoiceItem
 {
     public class GetRecentInvoiceItemQueryHandler : IRequestHandler<GetRecentInvoiceItemQuery, IList<RecentInvoiceItem>>
     {
@@ -15,7 +15,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetRecentInvoiceItem
 
         public async Task<IList<RecentInvoiceItem>> Handle(GetRecentInvoiceItemQuery request, CancellationToken cancellationToken)
         {
-            var query = _appDbContext.Invoices.AsNoTracking().Include(x => x.Client).Where(x => x.UserId == request.UserId).OrderByDescending(x => x.CreatedOn);
+            var query = _appDbContext.Invoices.AsNoTracking().Include(x => x.Client).Where(x => x.UserId == request.UserId).OrderByDescending(x => x.CreatedOn).Take(5);
                 return await query.Select(x => new RecentInvoiceItem{
                     Amount = x.Total,
                     ClientName = x.Client.Name,

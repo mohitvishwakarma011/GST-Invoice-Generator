@@ -1,4 +1,4 @@
-﻿namespace GI.Application.DataTransferObjects.InvoiceWorkItem
+﻿namespace GI.Application.DataTransferObjects.Dashboard
 {
     public class RecentInvoiceItem
     {
