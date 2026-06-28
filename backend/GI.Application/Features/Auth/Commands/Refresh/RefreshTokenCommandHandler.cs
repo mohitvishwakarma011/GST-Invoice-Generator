@@ -23,7 +23,7 @@ namespace GI.Application.Features.Auth.Commands.Refresh
                 throw new InvalidOperationException("Invalid refresh token.");
 
             token.IsRevoked = true; //No explicit update call for save isRevoked
-            if (token.User == null) throw new InvalidOperationException("User not found for refresh token");
+            if (token.User == null) throw new InvalidOperationException("User not fou   nd for refresh token");
 
             var newRefreshToken = _tokenService.GenerateRefreshToken(token.User);
             _appDbContext.RefreshTokens.Add(newRefreshToken);

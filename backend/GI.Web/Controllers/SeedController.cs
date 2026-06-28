@@ -16,5 +16,7 @@ namespace GI.Web.Controllers
             await mediator.Send(new SeedDbCommand());
             return Ok();
         }
+
+
     }
 }

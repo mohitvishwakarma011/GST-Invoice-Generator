@@ -29,7 +29,7 @@ namespace GI.Application.Features.Auth.Commands.Register
 
             RuleFor(x => x.Address)
                 .NotEmpty().WithMessage("Address is required.")
-                .MaximumLength(70).WithMessage("Address cannot exceed 70 characters.");
+                .MaximumLength(500).WithMessage("Address cannot exceed 500 characters.");
         }
 
     }

@@ -1,12 +1,11 @@
 ﻿using GI.Application.Common.Interfaces;
-using GI.Application.DataTransferObjects.Auth;
 using GI.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace GI.Application.Features.Auth.Commands.Register
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthResponse>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
     {
         private readonly IAppDbContext _appDbContext;
         private readonly ITokenService _tokenService;
@@ -17,7 +16,7 @@ namespace GI.Application.Features.Auth.Commands.Register
             _tokenService = tokenService;
         }
 
-        public async Task<AuthResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
          {
             bool emailExists = await _appDbContext.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
             if (emailExists)
@@ -40,15 +39,6 @@ namespace GI.Application.Features.Auth.Commands.Register
             var refreshToken = _tokenService.GenerateRefreshToken(user);
             _appDbContext.RefreshTokens.Add(refreshToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
-
-            return new AuthResponse
-            {
-                AccessToken = _tokenService.GenerateAccessToken(user),
-                RefreshToken = refreshToken.Token,
-                RefreshTokenExpiry = refreshToken.ExpiresAt,
-                Email = user.Email,
-                BusinessName = user.BusinessName
-            };
         }
     }
 }

@@ -36,3 +36,17 @@ public struct CachingKeyPrefix
 {
     public const string InvoiceById = "InvoiceById";
 }
+
+public struct CorsPolicy
+{
+    public const string DefaultCorsPolicy = "Default";
+}
+
+public struct DashboardItemType
+{
+    public const string TotalInvoices = "Total Invoices";
+    public const string UnpaidInvoices = "Unpaid Invoices";
+    public const string PaidInvoices = "Paid Invoices";
+    public const string TotalRevenue = "Total Revenue";
+
+}

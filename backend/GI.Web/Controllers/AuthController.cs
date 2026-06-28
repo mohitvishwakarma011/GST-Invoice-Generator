@@ -1,4 +1,6 @@
-﻿using GI.Application.Features.Auth.Commands.Login;
+﻿using GI.Application.Features.Auth.Commands.HardResetPassword;
+using GI.Application.Features.Auth.Commands.Login;
+using GI.Application.Features.Auth.Commands.Logout;
 using GI.Application.Features.Auth.Commands.Refresh;
 using GI.Application.Features.Auth.Commands.Register;
 using MediatR;
@@ -22,8 +24,8 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpPost("login")]
@@ -41,6 +43,25 @@ namespace GI.Web.Controllers
         public async Task<IActionResult> RefreshToken([FromBody]RefreshAccessTokenCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+
+        [HttpPut("hard-reset")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> HardResetPassword([FromBody] HardResetPasswordCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPut("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> LogoutUser([FromBody]LogoutCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

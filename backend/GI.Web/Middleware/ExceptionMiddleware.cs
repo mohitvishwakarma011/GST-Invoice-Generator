@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Text.Json;
 
 namespace GI.Web.Middleware
@@ -18,8 +19,8 @@ namespace GI.Web.Middleware
             catch (FluentValidation.ValidationException ex)
             {
                 context.Response.ContentType = "application/json";
-
-                var response = JsonSerializer.Serialize(ex.Errors.Select(x => new { Property = x.PropertyName, Message = x.ErrorMessage }));
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var response = JsonSerializer.Serialize(ex.Errors.Select(x => new { Message = x.ErrorMessage }));
                 await context.Response.WriteAsync(response);
             }
             catch (Exception ex)
@@ -33,8 +34,9 @@ namespace GI.Web.Middleware
                     InvalidOperationException => (int)HttpStatusCode.Conflict,
                     _ => (int)HttpStatusCode.InternalServerError
                 };
-
-                var response = JsonSerializer.Serialize(new { message = ex.Message });
+                var errors = new List<object>();
+                errors.Add(new { message = ex.Message });
+                var response = JsonSerializer.Serialize(errors);
                 await context.Response.WriteAsync(response);
             }
         }
