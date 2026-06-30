@@ -1,31 +1,24 @@
-# Base runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-WORKDIR /app
-
-# Railway expects the application to listen on this port
-ENV ASPNETCORE_URLS=http://+:8080
-
-EXPOSE 8080
-
-# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
-
 WORKDIR /src
 
-COPY ["GI.Web.csproj", "."]
-RUN dotnet restore "GI.Web.csproj"
-
+# Copy the entire backend folder
 COPY . .
 
-RUN dotnet publish "GI.Web.csproj" \
-    -c $BUILD_CONFIGURATION \
+# Restore the web project (project references will resolve)
+RUN dotnet restore "GI.Web/GI.Web.csproj"
+
+# Publish
+RUN dotnet publish "GI.Web/GI.Web.csproj" \
+    -c Release \
     -o /app/publish \
+    --no-restore \
     /p:UseAppHost=false
 
-# Final image
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 COPY --from=build /app/publish .
 
