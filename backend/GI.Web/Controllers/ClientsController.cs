@@ -60,5 +60,6 @@ namespace GI.Web.Controllers
             await _mediator.Send(command);
             return Ok();
         }
+
     }
 }
