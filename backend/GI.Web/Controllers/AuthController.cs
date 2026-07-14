@@ -34,6 +34,13 @@ namespace GI.Web.Controllers
         public async Task<IActionResult> Login(LoginCommand command)
         {
             var result = await _mediator.Send(command);
+            Response.Cookies.Append("refreshToken",result.RefreshToken,new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = result.RefreshTokenExpiry
+            });
             return Ok(result);
         }
 
