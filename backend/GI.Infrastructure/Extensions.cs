@@ -46,6 +46,7 @@ namespace GI.Infrastructure
                         policy.WithOrigins(configuration.GetSection("ValidOrigins").Value?.Split(",") ?? throw new Exception("No valid origins define"));
                         policy.AllowAnyHeader();
                         policy.AllowAnyMethod();
+                        policy.AllowCredentials();
                     });
             });
         }

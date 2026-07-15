@@ -17,7 +17,8 @@ namespace GI.Application.Features.Auth.Commands.Refresh
 
         public async Task<AuthResponse> Handle(RefreshAccessTokenCommand request, CancellationToken cancellationToken)
         {
-            var token = await _appDbContext.RefreshTokens.Include(x=>x.User).SingleOrDefaultAsync(x => x.Token == request.RefreshToken,cancellationToken);
+            var token = await _appDbContext.RefreshTokens.Include(x=>x.User).
+                SingleOrDefaultAsync(x => x.Token == request.RefreshToken,cancellationToken);
 
             if(token == null || token.IsRevoked || token.ExpiresAt < DateTime.UtcNow)
                 throw new InvalidOperationException("Invalid refresh token.");

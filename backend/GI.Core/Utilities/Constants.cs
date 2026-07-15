@@ -50,3 +50,8 @@ public struct DashboardItemType
     public const string TotalRevenue = "Total Revenue";
 
 }
+
+public struct AppConstants
+{
+    public const string RefershTokenCookieKey = "refreshToken";
+}

@@ -1,4 +1,5 @@
-﻿using GI.Application.Features.Auth.Commands.HardResetPassword;
+﻿using GI.Application.DataTransferObjects.Auth;
+using GI.Application.Features.Auth.Commands.HardResetPassword;
 using GI.Application.Features.Auth.Commands.Login;
 using GI.Application.Features.Auth.Commands.Logout;
 using GI.Application.Features.Auth.Commands.Refresh;
@@ -6,6 +7,7 @@ using GI.Application.Features.Auth.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace GI.Web.Controllers
 {
@@ -34,22 +36,45 @@ namespace GI.Web.Controllers
         public async Task<IActionResult> Login(LoginCommand command)
         {
             var result = await _mediator.Send(command);
-            Response.Cookies.Append("refreshToken",result.RefreshToken,new CookieOptions
+            var response = new AuthResponseBase
+            {
+                AccessToken = result.AccessToken,
+                BusinessName = result.BusinessName,
+                Email = result.Email
+            };
+            Response.Cookies.Append(AppConstants.RefershTokenCookieKey, result.RefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = result.RefreshTokenExpiry
             });
-            return Ok(result);
+            return Ok(response);
         }
 
         [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RefreshToken([FromBody]RefreshAccessTokenCommand command)
+        public async Task<IActionResult> RefreshToken()
         {
-            return Ok(await _mediator.Send(command));
+            var cookie = Request.Cookies[AppConstants.RefershTokenCookieKey] ??
+                            throw new UnauthorizedAccessException("Session has been expired. Please login!");
+            var command = new RefreshAccessTokenCommand { RefreshToken = cookie };
+            var result = await _mediator.Send(command);
+            var response = new AuthResponseBase
+            {
+                AccessToken = result.AccessToken,
+                BusinessName = result.BusinessName,
+                Email = result.Email
+            };
+            Response.Cookies.Append(AppConstants.RefershTokenCookieKey, result.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = result.RefreshTokenExpiry
+            });
+            return Ok(response);
         }
 
         [HttpPut("hard-reset")]
@@ -65,8 +90,9 @@ namespace GI.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        public async Task<IActionResult> LogoutUser([FromBody]LogoutCommand command)
+        public async Task<IActionResult> LogoutUser([FromBody] LogoutCommand command)
         {
+            Response.Cookies.Delete(AppConstants.RefershTokenCookieKey);
             await _mediator.Send(command);
             return Ok();
         }
