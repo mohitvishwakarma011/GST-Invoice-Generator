@@ -1,3 +1,10 @@
+using GI.Application.Features.Clients.Commands.CreateClient;
+using GI.Application.Features.Clients.Commands.DeleteClient;
+using GI.Application.Features.Clients.Commands.UpdateClient;
+using GI.Application.Features.Clients.Queries.GetClientById;
+using GI.Application.Features.Clients.Queries.GetClientInvoices;
+using GI.Application.Features.Clients.Queries.GetClients;
+using GI.Application.Features.Clients.Queries.GetClientSummary;
 using GI.Application.Features.Clients.CreateClient;
 using GI.Application.Features.Clients.DeleteClient;
 using GI.Application.Features.Clients.GetClients;
@@ -13,7 +20,7 @@ namespace GI.Web.Controllers
     public class ClientsController : BaseController
     {
         private readonly ISender _mediator;
-        public ClientsController(ISender mediator,IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public ClientsController(ISender mediator, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _mediator = mediator;
         }
@@ -59,6 +66,55 @@ namespace GI.Web.Controllers
         {
             await _mediator.Send(new DeleteClientCommand(ClientId: id, UserId: UserId));
             return NoContent();
+        }
+
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> UpdateClient(UpdateClientCommand command)
+        {
+            command.UserId = UserId;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetClient([FromRoute] int id)
+        {
+            var result = await _mediator.Send(new GetClinetByIdQuery
+            {
+                ClientId = id,
+                UserId = UserId
+            });
+            return Ok(result);
+        }
+
+        [HttpGet("summary/{clientId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetClientSummary([FromRoute] int clientId)
+        {
+            var result = await _mediator.Send(new GetClientSummaryQuery
+            {
+                ClientId = clientId,
+                UserId = UserId
+            });
+            return Ok(result);
+        }
+
+        [HttpGet("invoices/{clientId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetClientInvoices([FromRoute] int clientId)
+        {
+            var query = new GetClientInvoicesQuery { ClientId = clientId, UserId = UserId };
+            return Ok(await _mediator.Send(query));
         }
     }
 }

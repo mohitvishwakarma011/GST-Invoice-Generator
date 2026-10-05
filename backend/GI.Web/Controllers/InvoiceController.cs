@@ -6,7 +6,6 @@ using GI.Application.Features.InvoiceWorkItem.Queries.GetGroupedInvoiceList;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoiceById;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicePdf;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser;
-using GI.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

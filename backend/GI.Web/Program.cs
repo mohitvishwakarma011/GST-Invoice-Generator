@@ -1,10 +1,8 @@
-
 using GI.Infrastructure;
 using GI.Infrastructure.Data;
 using GI.Web.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace GI.Web
 {
@@ -55,14 +53,13 @@ namespace GI.Web
             });
 
             var app = builder.Build();
-
+            app.UseCors(CorsPolicy.DefaultCorsPolicy);
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthentication();

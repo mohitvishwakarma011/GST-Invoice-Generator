@@ -18,12 +18,11 @@ namespace GI.Application.Features.Auth.Commands.Login
 
         public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken ct)
         {
-
             var user = await _db.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email.ToLower(), ct);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid email or password.");
+                throw new InvalidOperationException("Invalid email or password.");
 
             //revoke all unrevoked refresh Token
             await _db.RefreshTokens.Where(x => x.IsRevoked == false && x.UserId == user.Id).ExecuteUpdateAsync(setters => setters.SetProperty(t => t.IsRevoked,true),ct);

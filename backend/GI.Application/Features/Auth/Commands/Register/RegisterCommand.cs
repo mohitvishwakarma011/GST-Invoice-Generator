@@ -1,9 +1,8 @@
-﻿using GI.Application.DataTransferObjects.Auth;
-using MediatR;
+﻿using MediatR;
 
 namespace GI.Application.Features.Auth.Commands.Register
 {
-    public class RegisterCommand : IRequest<AuthResponse>
+    public class RegisterCommand : IRequest
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;

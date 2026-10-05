@@ -1,6 +1,5 @@
 ﻿using GI.Application.Common.Interfaces;
 using GI.Application.DataTransferObjects.InvoiceWorkItem;
-using GI.Application.Features.Clients.GetClients;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -27,7 +26,7 @@ namespace GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser
         {
             request.AssignDefaultValues("CreatedOn");
             var cacheKey = $"{nameof(GetInvoicesForUserQuery)}_uid:{request.UserId}_ps:{request.PageSize}_pi:{request.PageIndex}_s:{request.Sort}_o:{request.Order}_sch:{request.Search}";
-            if (_memoryCache.TryGetValue(cacheKey,out IList<InvoiceListDto> cachedResult)) {
+            if (_memoryCache.TryGetValue(cacheKey,out IList<InvoiceListDto>? cachedResult)) {
                 _logger.LogInformation($"Handled {nameof(GetInvoicesForUserQuery)} from Cache");
                 return cachedResult!;
             }

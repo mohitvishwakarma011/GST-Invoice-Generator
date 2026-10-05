@@ -3,7 +3,7 @@ using GI.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GI.Application.Features.Seed
+namespace GI.Application.Features.Seed.SeedCommand
 {
     public class SeedDbCommandHandler(IAppDbContext appDbContext) : IRequestHandler<SeedDbCommand>
     {

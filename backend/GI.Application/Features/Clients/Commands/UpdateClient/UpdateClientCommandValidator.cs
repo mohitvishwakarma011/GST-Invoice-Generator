@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace GI.Application.Features.Clients.CreateClient
+namespace GI.Application.Features.Clients.Commands.UpdateClient
 {
-    public class CreateClientCommandValidator : AbstractValidator<CreateClientCommand>
+    public class UpdateClientCommandValidator : AbstractValidator<UpdateClientCommand>
     {
-        public CreateClientCommandValidator()
+        public UpdateClientCommandValidator() 
         {
             RuleFor(x => x.Name).NotEmpty().NotNull().MaximumLength(200);
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
@@ -14,6 +14,7 @@ namespace GI.Application.Features.Clients.CreateClient
                 .Matches(@"^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$")
                 .WithMessage("Invalid GSTIN format.")
                 .When(x => !string.IsNullOrWhiteSpace(x.Gstin)); // GSTIN is optional for clients
+            RuleFor(x => x.ClientId).GreaterThan(0);
         }
     }
 }

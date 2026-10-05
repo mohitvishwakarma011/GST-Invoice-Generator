@@ -17,13 +17,14 @@ namespace GI.Application.Features.Auth.Commands.Refresh
 
         public async Task<AuthResponse> Handle(RefreshAccessTokenCommand request, CancellationToken cancellationToken)
         {
-            var token = await _appDbContext.RefreshTokens.Include(x=>x.User).SingleOrDefaultAsync(x => x.Token == request.RefreshToken,cancellationToken);
+            var token = await _appDbContext.RefreshTokens.Include(x=>x.User).
+                SingleOrDefaultAsync(x => x.Token == request.RefreshToken,cancellationToken);
 
             if(token == null || token.IsRevoked || token.ExpiresAt < DateTime.UtcNow)
                 throw new InvalidOperationException("Invalid refresh token.");
 
             token.IsRevoked = true; //No explicit update call for save isRevoked
-            if (token.User == null) throw new InvalidOperationException("User not found for refresh token");
+            if (token.User == null) throw new InvalidOperationException("User not fou   nd for refresh token");
 
             var newRefreshToken = _tokenService.GenerateRefreshToken(token.User);
             _appDbContext.RefreshTokens.Add(newRefreshToken);

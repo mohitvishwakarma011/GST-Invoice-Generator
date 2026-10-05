@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System.Linq.Dynamic.Core;
 
-namespace GI.Application.Features.Clients.GetClients
+namespace GI.Application.Features.Clients.Queries.GetClients
 {
     public class GetClientsQueryHandler : IRequestHandler<GetClientsQuery, IList<ClientDto>>
     {
@@ -27,7 +27,7 @@ namespace GI.Application.Features.Clients.GetClients
             var cacheKey = $"{nameof(GetClientsQuery)}_uid:{request.UserId}_ps:{request.PageSize}_pi:{request.PageIndex}_s:{request.Sort}_o:{request.Order}_sch:{request.Search}";
 
             //Check Cache if data exist
-            if(_cache.TryGetValue(cacheKey,out IList<ClientDto> result)){
+            if(_cache.TryGetValue(cacheKey,out IList<ClientDto>? result)){
                 _logger.LogInformation($"Handled {nameof(GetClientsQuery)} from cache");
                 return result!;
             }

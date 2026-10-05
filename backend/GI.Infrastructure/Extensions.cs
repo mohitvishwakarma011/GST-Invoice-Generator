@@ -38,6 +38,17 @@ namespace GI.Infrastructure
                 options.ExpirationScanFrequency = TimeSpan.FromMinutes(5);
             }); //Add Caching
             ConfigureOptions(services,configuration);
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: CorsPolicy.DefaultCorsPolicy,
+                    policy =>
+                    {
+                        policy.WithOrigins(configuration.GetSection("ValidOrigins").Value?.Split(",") ?? throw new Exception("No valid origins define"));
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
+                        policy.AllowCredentials();
+                    });
+            });
         }
         private static void ConfigureOptions(IServiceCollection services, IConfiguration configuration)
         {
