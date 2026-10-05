@@ -1,7 +1,7 @@
-﻿using GI.Application.Features;
 using GI.Application.Features.Clients.CreateClient;
 using GI.Application.Features.Clients.DeleteClient;
 using GI.Application.Features.Clients.GetClients;
+using GI.Application.Features.Clients.Queries.GetClientSelectOption;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +36,17 @@ namespace GI.Web.Controllers
         public async Task<IActionResult> GetAll([FromQuery] GetClientsQuery query)
         {
             query.UserId = UserId;
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("select-option")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetClientSelectOptions()
+        {
+            var query = new GetClientSelectOptionQuery { UserId = UserId};
             var result = await _mediator.Send(query);
             return Ok(result);
         }

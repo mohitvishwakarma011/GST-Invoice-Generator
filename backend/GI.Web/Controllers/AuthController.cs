@@ -35,7 +35,7 @@ namespace GI.Web.Controllers
             return Ok(result);
         }
 
-        [HttpPost("refresh")]
+        [HttpGet("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RefreshToken([FromBody]RefreshAccessTokenCommand command)

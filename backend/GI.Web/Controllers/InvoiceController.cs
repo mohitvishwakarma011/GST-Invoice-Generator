@@ -2,6 +2,7 @@
 using GI.Application.Features.InvoiceWorkItem.Commands.CreateInvoice;
 using GI.Application.Features.InvoiceWorkItem.Commands.DeleteInvoice;
 using GI.Application.Features.InvoiceWorkItem.Commands.UpdateInvoiceStatus;
+using GI.Application.Features.InvoiceWorkItem.Queries.GetGroupedInvoiceList;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoiceById;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicePdf;
 using GI.Application.Features.InvoiceWorkItem.Queries.GetInvoicesForUser;
@@ -77,6 +78,17 @@ namespace GI.Web.Controllers
             var result = await mediator.Send(query);
             var bytes = pdfService.GenerateInvoicePdf(result);
             return File(bytes, "application/pdf", $"{result.InvoiceNumber}.pdf");
+        }
+
+        [HttpGet("grouped-list")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> GetGroupedInvoiceList()
+        {
+            var query = new GetGroupedInvoiceListQuery();
+            query.UserId = UserId;
+            return Ok(await mediator.Send(query));
         }
     }
 }
